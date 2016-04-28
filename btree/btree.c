@@ -17,7 +17,7 @@
 #define cmp(a, b) ( ( ((a)-(b)) >= (0) ) ? (1) : (0) ) //比较a，b大小  
 #define DEBUG_BTREE  
   
-// add some comment.  
+// add some commentXXXXX.  
 // 模拟向磁盘写入节点  
 void disk_write(BTNode* node)  
 {  
