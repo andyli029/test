@@ -3,10 +3,10 @@
     @coder:weedge E-mail:weege@126.com 
     @date:2011/08/27 
     @comment: 
-        ²Î¿¼£ºhttp://www.cppblog.com/converse/archive/2009/10/13/98521.html 
-        ÊµÏÖ¶ÔorderĞò(½×)µÄB-TREE½á¹¹»ù±¾²Ù×÷µÄ·â×°¡£ 
-        ²éÕÒ£ºsearch£¬²åÈë£ºinsert£¬É¾³ı£ºremove¡£ 
-        ´´½¨£ºcreate£¬Ïú»Ù£ºdestory£¬´òÓ¡£ºprint¡£ 
+        å‚è€ƒï¼šhttp://www.cppblog.com/converse/archive/2009/10/13/98521.html 
+        å®ç°å¯¹orderåº(é˜¶)çš„B-TREEç»“æ„åŸºæœ¬æ“ä½œçš„å°è£…ã€‚ 
+        æŸ¥æ‰¾ï¼šsearchï¼Œæ’å…¥ï¼šinsertï¼Œåˆ é™¤ï¼šremoveã€‚ 
+        åˆ›å»ºï¼šcreateï¼Œé”€æ¯ï¼šdestoryï¼Œæ‰“å°ï¼šprintã€‚ 
 **********************************************************/  
 #include <stdlib.h>  
 #include <stdio.h>  
@@ -14,44 +14,44 @@
 #include "btree.h"  
   
 //#define max(a, b) (((a) > (b)) ? (a) : (b))  
-#define cmp(a, b) ( ( ((a)-(b)) >= (0) ) ? (1) : (0) ) //±È½Ïa£¬b´óĞ¡  
+#define cmp(a, b) ( ( ((a)-(b)) >= (0) ) ? (1) : (0) ) //æ¯”è¾ƒaï¼Œbå¤§å°  
 #define DEBUG_BTREE  
   
-  
-// Ä£ÄâÏò´ÅÅÌĞ´Èë½Úµã  
+// add some commentXXXXX.  
+// æ¨¡æ‹Ÿå‘ç£ç›˜å†™å…¥èŠ‚ç‚¹  
 void disk_write(BTNode* node)  
 {  
     int i;  
-//´òÓ¡³ö½áµãÖĞµÄÈ«²¿ÔªËØ£¬·½±ãµ÷ÊÔ²é¿´keynumÖ®ºóµÄÔªËØÊÇ·ñÎª0(¼´ÊÇ·ñ´æÔÚÀ¬»øÊı¾İ)£»¶ø²»ÊÇkeynum¸öÔªËØ¡£  
-    printf("Ïò´ÅÅÌĞ´Èë½Úµã");  
+//æ‰“å°å‡ºç»“ç‚¹ä¸­çš„å…¨éƒ¨å…ƒç´ ï¼Œæ–¹ä¾¿è°ƒè¯•æŸ¥çœ‹keynumä¹‹åçš„å…ƒç´ æ˜¯å¦ä¸º0(å³æ˜¯å¦å­˜åœ¨åƒåœ¾æ•°æ®)ï¼›è€Œä¸æ˜¯keynumä¸ªå…ƒç´ ã€‚  
+    printf("å‘ç£ç›˜å†™å…¥èŠ‚ç‚¹");  
     for(i=0;i<ORDER-1;i++){  
         printf("%c",node->key[i]);  
     }  
     printf("\n");  
 }  
   
-// Ä£Äâ´Ó´ÅÅÌ¶ÁÈ¡½Úµã  
+// æ¨¡æ‹Ÿä»ç£ç›˜è¯»å–èŠ‚ç‚¹  
 void disk_read(BTNode** node)  
 {  
     int i;  
-//´òÓ¡³ö½áµãÖĞµÄÈ«²¿ÔªËØ£¬·½±ãµ÷ÊÔ²é¿´keynumÖ®ºóµÄÔªËØÊÇ·ñÎª0(¼´ÊÇ·ñ´æÔÚÀ¬»øÊı¾İ)£»¶ø²»ÊÇkeynum¸öÔªËØ¡£  
-    printf("Ïò´ÅÅÌ¶ÁÈ¡½Úµã");  
+//æ‰“å°å‡ºç»“ç‚¹ä¸­çš„å…¨éƒ¨å…ƒç´ ï¼Œæ–¹ä¾¿è°ƒè¯•æŸ¥çœ‹keynumä¹‹åçš„å…ƒç´ æ˜¯å¦ä¸º0(å³æ˜¯å¦å­˜åœ¨åƒåœ¾æ•°æ®)ï¼›è€Œä¸æ˜¯keynumä¸ªå…ƒç´ ã€‚  
+    printf("å‘ç£ç›˜è¯»å–èŠ‚ç‚¹");  
     for(i=0;i<ORDER-1;i++){  
         printf("%c",(*node)->key[i]);  
     }  
     printf("\n");  
 }  
   
-// °´²ã´Î´òÓ¡ B Ê÷  
+// æŒ‰å±‚æ¬¡æ‰“å° B æ ‘  
 void BTree_print(const BTree tree, int layer)  
 {  
     int i;  
     BTNode* node = tree;  
   
     if (node) {  
-        printf("µÚ %d ²ã£¬ %d node : ", layer, node->keynum);  
+        printf("ç¬¬ %d å±‚ï¼Œ %d node : ", layer, node->keynum);  
   
-        //´òÓ¡³ö½áµãÖĞµÄÈ«²¿ÔªËØ£¬·½±ãµ÷ÊÔ²é¿´keynumÖ®ºóµÄÔªËØÊÇ·ñÎª0(¼´ÊÇ·ñ´æÔÚÀ¬»øÊı¾İ)£»¶ø²»ÊÇkeynum¸öÔªËØ¡£  
+        //æ‰“å°å‡ºç»“ç‚¹ä¸­çš„å…¨éƒ¨å…ƒç´ ï¼Œæ–¹ä¾¿è°ƒè¯•æŸ¥çœ‹keynumä¹‹åçš„å…ƒç´ æ˜¯å¦ä¸º0(å³æ˜¯å¦å­˜åœ¨åƒåœ¾æ•°æ®)ï¼›è€Œä¸æ˜¯keynumä¸ªå…ƒç´ ã€‚  
         for (i = 0; i < ORDER-1; ++i) {  
         //for (i = 0; i < node->keynum; ++i) {  
             printf("%c ", node->key[i]);  
@@ -67,11 +67,11 @@ void BTree_print(const BTree tree, int layer)
         }  
     }  
     else {  
-        printf("Ê÷Îª¿Õ¡£\n");  
+        printf("æ ‘ä¸ºç©ºã€‚\n");  
     }  
 }  
   
-// ½áµãnodeÄÚ¶Ô¹Ø¼ü×Ö½øĞĞ¶ş·Ö²éÕÒ¡£  
+// ç»“ç‚¹nodeå†…å¯¹å…³é”®å­—è¿›è¡ŒäºŒåˆ†æŸ¥æ‰¾ã€‚  
 int binarySearch(BTNode* node, int low, int high, KeyType Fkey)  
 {  
     int mid;  
@@ -88,18 +88,18 @@ int binarySearch(BTNode* node, int low, int high, KeyType Fkey)
         }  
         if (Fkey==node->key[mid])  
         {  
-            return mid;//·µ»ØÏÂ±ê¡£  
+            return mid;//è¿”å›ä¸‹æ ‡ã€‚  
         }  
     }  
-    return -1;//Î´ÕÒµ½·µ»Ø-1.  
+    return -1;//æœªæ‰¾åˆ°è¿”å›-1.  
 }  
   
 //=======================================================insert=====================================  
   
 /*************************************************************************************** 
-   ½«·ÖÁÑµÄ½áµãÖĞµÄÒ»°ëÔªËØ¸øĞÂ½¨µÄ½áµã£¬²¢ÇÒ½«·ÖÁÑ½áµãÖĞµÄÖĞ¼ä¹Ø¼ü×ÖÔªËØÉÏÒÆÖÁ¸¸½ÚµãÖĞ¡£ 
-   parent ÊÇÒ»¸ö·ÇÂúµÄ¸¸½Úµã 
-   node ÊÇ tree º¢×Ó±íÖĞÏÂ±êÎª index µÄº¢×Ó½Úµã£¬ÇÒÊÇÂúµÄ£¬Ğè·ÖÁÑ¡£ 
+   å°†åˆ†è£‚çš„ç»“ç‚¹ä¸­çš„ä¸€åŠå…ƒç´ ç»™æ–°å»ºçš„ç»“ç‚¹ï¼Œå¹¶ä¸”å°†åˆ†è£‚ç»“ç‚¹ä¸­çš„ä¸­é—´å…³é”®å­—å…ƒç´ ä¸Šç§»è‡³çˆ¶èŠ‚ç‚¹ä¸­ã€‚ 
+   parent æ˜¯ä¸€ä¸ªéæ»¡çš„çˆ¶èŠ‚ç‚¹ 
+   node æ˜¯ tree å­©å­è¡¨ä¸­ä¸‹æ ‡ä¸º index çš„å­©å­èŠ‚ç‚¹ï¼Œä¸”æ˜¯æ»¡çš„ï¼Œéœ€åˆ†è£‚ã€‚ 
 *******************************************************************/  
 void BTree_split_child(BTNode* parent, int index, BTNode* node)  
 {  
@@ -111,7 +111,7 @@ void BTree_split_child(BTNode* parent, int index, BTNode* node)
     assert(parent && node);  
   
   
-    // ´´½¨ĞÂ½Úµã£¬´æ´¢ node ÖĞºó°ë²¿·ÖµÄÊı¾İ  
+    // åˆ›å»ºæ–°èŠ‚ç‚¹ï¼Œå­˜å‚¨ node ä¸­ååŠéƒ¨åˆ†çš„æ•°æ®  
     newNode = (BTNode*)calloc(sizeof(BTNode), 1);  
     if (!newNode) {  
         printf("Error! out of memory!\n");  
@@ -121,13 +121,13 @@ void BTree_split_child(BTNode* parent, int index, BTNode* node)
     newNode->isLeaf = node->isLeaf;  
     newNode->keynum = BTree_D - 1;  
   
-    // ¿½±´ node ºó°ë²¿·Ö¹Ø¼ü×Ö,È»ºó½«nodeºó°ë²¿·ÖÖÃÎª0¡£  
+    // æ‹·è´ node ååŠéƒ¨åˆ†å…³é”®å­—,ç„¶åå°†nodeååŠéƒ¨åˆ†ç½®ä¸º0ã€‚  
     for (i = 0; i < newNode->keynum; ++i){  
         newNode->key[i] = node->key[BTree_D + i];  
         node->key[BTree_D + i] = 0;  
     }  
   
-    // Èç¹û node ²»ÊÇÒ¶×Ó½Úµã£¬¿½±´ node ºó°ë²¿·ÖµÄÖ¸Ïòº¢×Ó½ÚµãµÄÖ¸Õë£¬È»ºó½«nodeºó°ë²¿·ÖÖ¸Ïòº¢×Ó½ÚµãµÄÖ¸ÕëÖÃÎªNULL¡£  
+    // å¦‚æœ node ä¸æ˜¯å¶å­èŠ‚ç‚¹ï¼Œæ‹·è´ node ååŠéƒ¨åˆ†çš„æŒ‡å‘å­©å­èŠ‚ç‚¹çš„æŒ‡é’ˆï¼Œç„¶åå°†nodeååŠéƒ¨åˆ†æŒ‡å‘å­©å­èŠ‚ç‚¹çš„æŒ‡é’ˆç½®ä¸ºNULLã€‚  
     if (!node->isLeaf) {  
         for (i = 0; i < BTree_D; i++) {  
             newNode->child[i] = node->child[BTree_D + i];  
@@ -135,10 +135,10 @@ void BTree_split_child(BTNode* parent, int index, BTNode* node)
         }  
     }  
   
-    // ½« node ·ÖÁÑ³ö newNode Ö®ºó£¬ÀïÃæµÄÊı¾İ¼õ°ë  
+    // å°† node åˆ†è£‚å‡º newNode ä¹‹åï¼Œé‡Œé¢çš„æ•°æ®å‡åŠ  
     node->keynum = BTree_D - 1;  
   
-    // µ÷Õû¸¸½ÚµãÖĞµÄÖ¸Ïòº¢×ÓµÄÖ¸ÕëºÍ¹Ø¼ü×ÖÔªËØ¡£·ÖÁÑÊ±¸¸½ÚµãÔö¼ÓÖ¸Ïòº¢×ÓµÄÖ¸ÕëºÍ¹Ø¼üÔªËØ¡£  
+    // è°ƒæ•´çˆ¶èŠ‚ç‚¹ä¸­çš„æŒ‡å‘å­©å­çš„æŒ‡é’ˆå’Œå…³é”®å­—å…ƒç´ ã€‚åˆ†è£‚æ—¶çˆ¶èŠ‚ç‚¹å¢åŠ æŒ‡å‘å­©å­çš„æŒ‡é’ˆå’Œå…³é”®å…ƒç´ ã€‚  
     for (i = parent->keynum; i > index; --i) {  
         parent->child[i + 1] = parent->child[i];  
     }  
@@ -154,7 +154,7 @@ void BTree_split_child(BTNode* parent, int index, BTNode* node)
   
     node->key[BTree_D - 1] = 0;  
   
-    // Ğ´Èë´ÅÅÌ  
+    // å†™å…¥ç£ç›˜  
      disk_write(parent);  
      disk_write(newNode);  
      disk_write(node);  
@@ -165,7 +165,7 @@ void BTree_insert_nonfull(BTNode* node, KeyType key)
     int i;  
     assert(node);  
   
-    // ½ÚµãÊÇÒ¶×Ó½Úµã£¬Ö±½Ó²åÈë  
+    // èŠ‚ç‚¹æ˜¯å¶å­èŠ‚ç‚¹ï¼Œç›´æ¥æ’å…¥  
     if (node->isLeaf) {  
         i = node->keynum - 1;  
         while (i >= 0 && key < node->key[i]) {  
@@ -176,13 +176,13 @@ void BTree_insert_nonfull(BTNode* node, KeyType key)
         node->key[i + 1] = key;  
         ++node->keynum;  
   
-        // Ğ´Èë´ÅÅÌ  
+        // å†™å…¥ç£ç›˜  
         disk_write(node);  
     }  
   
-    // ½ÚµãÊÇÄÚ²¿½Úµã  
+    // èŠ‚ç‚¹æ˜¯å†…éƒ¨èŠ‚ç‚¹  
     else {  
-        /* ²éÕÒ²åÈëµÄÎ»ÖÃ*/  
+        /* æŸ¥æ‰¾æ’å…¥çš„ä½ç½®*/  
         i = node->keynum - 1;  
         while (i >= 0 && key < node->key[i]) {  
             --i;  
@@ -190,13 +190,13 @@ void BTree_insert_nonfull(BTNode* node, KeyType key)
   
         ++i;  
   
-        // ´Ó´ÅÅÌ¶ÁÈ¡º¢×Ó½Úµã  
+        // ä»ç£ç›˜è¯»å–å­©å­èŠ‚ç‚¹  
         disk_read(&node->child[i]);  
   
-        // Èç¹û¸Ãº¢×Ó½ÚµãÒÑÂú£¬·ÖÁÑµ÷ÕûÖµ  
+        // å¦‚æœè¯¥å­©å­èŠ‚ç‚¹å·²æ»¡ï¼Œåˆ†è£‚è°ƒæ•´å€¼  
         if (node->child[i]->keynum == (ORDER-1)) {  
             BTree_split_child(node, i, node->child[i]);  
-            // Èç¹û´ı²åÈëµÄ¹Ø¼ü×Ö´óÓÚ¸Ã·ÖÁÑ½áµãÖĞÉÏÒÆµ½¸¸½ÚµãµÄ¹Ø¼ü×Ö£¬ÔÚ¸Ã¹Ø¼ü×ÖµÄÓÒº¢×Ó½áµãÖĞ½øĞĞ²åÈë²Ù×÷¡£  
+            // å¦‚æœå¾…æ’å…¥çš„å…³é”®å­—å¤§äºè¯¥åˆ†è£‚ç»“ç‚¹ä¸­ä¸Šç§»åˆ°çˆ¶èŠ‚ç‚¹çš„å…³é”®å­—ï¼Œåœ¨è¯¥å…³é”®å­—çš„å³å­©å­ç»“ç‚¹ä¸­è¿›è¡Œæ’å…¥æ“ä½œã€‚  
             if (key > node->key[i]) {  
                 ++i;  
             }  
@@ -213,7 +213,7 @@ void BTree_insert(BTree* tree, KeyType key)
 #ifdef DEBUG_BTREE  
     printf("BTree_insert:\n");  
 #endif  
-    // Ê÷Îª¿Õ  
+    // æ ‘ä¸ºç©º  
     if (NULL == root) {  
         root = (BTNode*)calloc(sizeof(BTNode), 1);  
         if (!root) {  
@@ -226,15 +226,15 @@ void BTree_insert(BTree* tree, KeyType key)
   
         *tree = root;  
   
-        // Ğ´Èë´ÅÅÌ  
+        // å†™å…¥ç£ç›˜  
         disk_write(root);  
   
         return;  
     }  
   
-    // ¸ù½ÚµãÒÑÂú£¬²åÈëÇ°ĞèÒª½øĞĞ·ÖÁÑµ÷Õû  
+    // æ ¹èŠ‚ç‚¹å·²æ»¡ï¼Œæ’å…¥å‰éœ€è¦è¿›è¡Œåˆ†è£‚è°ƒæ•´  
     if (root->keynum == (ORDER-1)) {  
-        // ²úÉúĞÂ½Úµãµ±×÷¸ù  
+        // äº§ç”Ÿæ–°èŠ‚ç‚¹å½“ä½œæ ¹  
         node = (BTNode*)calloc(sizeof(BTNode), 1);  
         if (!node) {  
             printf("Error! out of memory!\n");  
@@ -251,7 +251,7 @@ void BTree_insert(BTree* tree, KeyType key)
         BTree_insert_nonfull(node, key);  
     }  
   
-    // ¸ù½ÚµãÎ´Âú£¬ÔÚµ±Ç°½ÚµãÖĞ²åÈë key  
+    // æ ¹èŠ‚ç‚¹æœªæ»¡ï¼Œåœ¨å½“å‰èŠ‚ç‚¹ä¸­æ’å…¥ key  
     else {  
         BTree_insert_nonfull(root, key);  
     }  
@@ -259,11 +259,11 @@ void BTree_insert(BTree* tree, KeyType key)
   
 //=================================================remove========================================  
 /*********************************************************************************** 
-// ¶Ô tree ÖĞµÄ½Úµã node ½øĞĞºÏ²¢º¢×Ó½Úµã´¦Àí. 
-// ×¢Òâ£ºº¢×Ó½ÚµãµÄ keynum ±ØĞë¾ùÒÑ´ïµ½ÏÂÏŞ£¬¼´¾ùµÈÓÚ BTree_D - 1 
-// ½« tree ÖĞË÷ÒıÎª index  µÄ key ÏÂÒÆÖÁ×óº¢×Ó½áµãÖĞ£¬ 
-// ½« node ÖĞË÷ÒıÎª index + 1 µÄº¢×Ó½ÚµãºÏ²¢µ½Ë÷ÒıÎª index µÄº¢×Ó½ÚµãÖĞ£¬ÓÒº¢×ÓºÏ²¢µ½×óº¢×Ó½áµãÖĞ¡£ 
-// ²¢µ÷Ïà¹ØµÄ key ºÍÖ¸Õë¡£ 
+// å¯¹ tree ä¸­çš„èŠ‚ç‚¹ node è¿›è¡Œåˆå¹¶å­©å­èŠ‚ç‚¹å¤„ç†. 
+// æ³¨æ„ï¼šå­©å­èŠ‚ç‚¹çš„ keynum å¿…é¡»å‡å·²è¾¾åˆ°ä¸‹é™ï¼Œå³å‡ç­‰äº BTree_D - 1 
+// å°† tree ä¸­ç´¢å¼•ä¸º index  çš„ key ä¸‹ç§»è‡³å·¦å­©å­ç»“ç‚¹ä¸­ï¼Œ 
+// å°† node ä¸­ç´¢å¼•ä¸º index + 1 çš„å­©å­èŠ‚ç‚¹åˆå¹¶åˆ°ç´¢å¼•ä¸º index çš„å­©å­èŠ‚ç‚¹ä¸­ï¼Œå³å­©å­åˆå¹¶åˆ°å·¦å­©å­ç»“ç‚¹ä¸­ã€‚ 
+// å¹¶è°ƒç›¸å…³çš„ key å’ŒæŒ‡é’ˆã€‚ 
 ***************************************************/  
 void BTree_merge_child(BTree* tree, BTNode* node, int index)  
 {  
@@ -283,19 +283,19 @@ void BTree_merge_child(BTree* tree, BTNode* node, int index)
     assert(leftChild && leftChild->keynum == BTree_D - 1  
         && rightChild && rightChild->keynum == BTree_D - 1);  
   
-    // ½« nodeÖĞ¹Ø¼ü×ÖÏÂ±êÎªindex µÄ key ÏÂÒÆÖÁ×óº¢×Ó½áµãÖĞ£¬¸ÃkeyËù¶ÔÓ¦µÄÓÒº¢×Ó½áµãÖ¸ÏònodeµÄÓÒº¢×Ó½áµãÖĞµÄµÚÒ»¸öº¢×Ó¡£  
+    // å°† nodeä¸­å…³é”®å­—ä¸‹æ ‡ä¸ºindex çš„ key ä¸‹ç§»è‡³å·¦å­©å­ç»“ç‚¹ä¸­ï¼Œè¯¥keyæ‰€å¯¹åº”çš„å³å­©å­ç»“ç‚¹æŒ‡å‘nodeçš„å³å­©å­ç»“ç‚¹ä¸­çš„ç¬¬ä¸€ä¸ªå­©å­ã€‚  
     leftChild->key[leftChild->keynum] = key;  
     leftChild->child[leftChild->keynum + 1] = rightChild->child[0];  
     ++leftChild->keynum;  
   
-    // ÓÒº¢×ÓµÄÔªËØºÏ²¢µ½×óº¢×Ó½áµãÖĞ¡£  
+    // å³å­©å­çš„å…ƒç´ åˆå¹¶åˆ°å·¦å­©å­ç»“ç‚¹ä¸­ã€‚  
     for (i = 0; i < rightChild->keynum; ++i) {  
         leftChild->key[leftChild->keynum] = rightChild->key[i];  
         leftChild->child[leftChild->keynum + 1] = rightChild->child[i + 1];  
         ++leftChild->keynum;  
     }  
   
-    // ÔÚ node ÖĞÏÂÒÆµÄ keyºóÃæµÄÔªËØÇ°ÒÆ  
+    // åœ¨ node ä¸­ä¸‹ç§»çš„ keyåé¢çš„å…ƒç´ å‰ç§»  
     for (i = index; i < node->keynum - 1; ++i) {  
         node->key[i] = node->key[i + 1];  
         node->child[i + 1] = node->child[i + 2];  
@@ -304,7 +304,7 @@ void BTree_merge_child(BTree* tree, BTNode* node, int index)
     node->child[node->keynum] = NULL;  
     --node->keynum;  
   
-    // Èç¹û¸ù½ÚµãÃ»ÓĞ key ÁË£¬²¢½«¸ù½Úµãµ÷ÕûÎªºÏ²¢ºóµÄ×óº¢×Ó½Úµã£»È»ºóÉ¾³ıÊÍ·Å¿Õ¼ä¡£  
+    // å¦‚æœæ ¹èŠ‚ç‚¹æ²¡æœ‰ key äº†ï¼Œå¹¶å°†æ ¹èŠ‚ç‚¹è°ƒæ•´ä¸ºåˆå¹¶åçš„å·¦å­©å­èŠ‚ç‚¹ï¼›ç„¶ååˆ é™¤é‡Šæ”¾ç©ºé—´ã€‚  
     if (node->keynum == 0) {  
         if (*tree == node) {  
             *tree = leftChild;  
@@ -320,8 +320,8 @@ void BTree_merge_child(BTree* tree, BTNode* node, int index)
   
 void BTree_recursive_remove(BTree* tree, KeyType key)  
 {  
-    // B-ÊıµÄ±£³ÖÌõ¼şÖ®Ò»£º  
-    // ·Ç¸ù½ÚµãµÄÄÚ²¿½ÚµãµÄ¹Ø¼ü×ÖÊıÄ¿²»ÄÜÉÙÓÚ BTree_D - 1  
+    // B-æ•°çš„ä¿æŒæ¡ä»¶ä¹‹ä¸€ï¼š  
+    // éæ ¹èŠ‚ç‚¹çš„å†…éƒ¨èŠ‚ç‚¹çš„å…³é”®å­—æ•°ç›®ä¸èƒ½å°‘äº BTree_D - 1  
   
     int i, j, index;  
     BTNode *root = *tree;  
@@ -332,13 +332,13 @@ void BTree_recursive_remove(BTree* tree, KeyType key)
         return;  
     }  
   
-    // ½áµãÖĞÕÒkey¡£  
+    // ç»“ç‚¹ä¸­æ‰¾keyã€‚  
     index = 0;  
     while (index < node->keynum && key > node->key[index]) {  
         ++index;  
     }  
   
-/*======================º¬ÓĞkeyµÄµ±Ç°½áµãÊ±µÄÇé¿ö==================== 
+/*======================å«æœ‰keyçš„å½“å‰ç»“ç‚¹æ—¶çš„æƒ…å†µ==================== 
 node: 
 index of Key:            i-1  i  i+1 
                         +---+---+---+---+ 
@@ -352,15 +352,15 @@ index of Child:           i      i+1
                 +---+---+---+  +---+---+---+ 
                     leftChild     rightChild 
 ============================================================*/  
-    /*Ò»¡¢½áµãÖĞÕÒµ½ÁË¹Ø¼ü×ÖkeyµÄÇé¿ö.*/  
+    /*ä¸€ã€ç»“ç‚¹ä¸­æ‰¾åˆ°äº†å…³é”®å­—keyçš„æƒ…å†µ.*/  
     if (index < node->keynum && node->key[index] == key) {  
         BTNode *leftChild, *rightChild;  
         KeyType leftKey, rightKey;  
-        /* 1£¬ËùÔÚ½ÚµãÊÇÒ¶×Ó½Úµã£¬Ö±½ÓÉ¾³ı*/  
+        /* 1ï¼Œæ‰€åœ¨èŠ‚ç‚¹æ˜¯å¶å­èŠ‚ç‚¹ï¼Œç›´æ¥åˆ é™¤*/  
         if (node->isLeaf) {  
             for (i = index; i < node->keynum-1; ++i) {  
                 node->key[i] = node->key[i + 1];  
-                //node->child[i + 1] = node->child[i + 2];Ò¶×Ó½ÚµãµÄº¢×Ó½áµãÎª¿Õ£¬ÎŞĞèÒÆ¶¯´¦Àí¡£  
+                //node->child[i + 1] = node->child[i + 2];å¶å­èŠ‚ç‚¹çš„å­©å­ç»“ç‚¹ä¸ºç©ºï¼Œæ— éœ€ç§»åŠ¨å¤„ç†ã€‚  
             }  
             node->key[node->keynum-1] = 0;  
             //node->child[node->keynum] = NULL;  
@@ -374,11 +374,11 @@ index of Child:           i      i+1
   
             return;  
         }  
-        /*2.Ñ¡ÔñÍÑÆ¶ÖÂ¸»µÄº¢×Ó½áµã¡£*/  
-        // 2a£¬Ñ¡ÔñÏà¶Ô¸»ÓĞµÄ×óº¢×Ó½áµã¡£  
-        // Èç¹ûÎ»ÓÚ key Ç°µÄ×óº¢×Ó½áµãµÄ key ÊıÄ¿ >= BTree_D£¬  
-        // ÔÚÆäÖĞÕÒ key µÄ×óº¢×Ó½áµãµÄ×îºóÒ»¸öÔªËØÉÏÒÆÖÁ¸¸½ÚµãkeyµÄÎ»ÖÃ¡£  
-        // È»ºóÔÚ×óº¢×Ó½ÚµãÖĞµİ¹éÉ¾³ıÔªËØleftKey¡£  
+        /*2.é€‰æ‹©è„±è´«è‡´å¯Œçš„å­©å­ç»“ç‚¹ã€‚*/  
+        // 2aï¼Œé€‰æ‹©ç›¸å¯¹å¯Œæœ‰çš„å·¦å­©å­ç»“ç‚¹ã€‚  
+        // å¦‚æœä½äº key å‰çš„å·¦å­©å­ç»“ç‚¹çš„ key æ•°ç›® >= BTree_Dï¼Œ  
+        // åœ¨å…¶ä¸­æ‰¾ key çš„å·¦å­©å­ç»“ç‚¹çš„æœ€åä¸€ä¸ªå…ƒç´ ä¸Šç§»è‡³çˆ¶èŠ‚ç‚¹keyçš„ä½ç½®ã€‚  
+        // ç„¶ååœ¨å·¦å­©å­èŠ‚ç‚¹ä¸­é€’å½’åˆ é™¤å…ƒç´ leftKeyã€‚  
         else if (node->child[index]->keynum >= BTree_D) {  
             leftChild = node->child[index];  
             leftKey = leftChild->key[leftChild->keynum - 1];  
@@ -386,10 +386,10 @@ index of Child:           i      i+1
   
             BTree_recursive_remove(&leftChild, leftKey);  
         }  
-        // 2b£¬Ñ¡ÔñÏà¶Ô¸»ÓĞµÄÓÒº¢×Ó½áµã¡£  
-        // Èç¹ûÎ»ÓÚ key ºóµÄÓÒº¢×Ó½áµãµÄ key ÊıÄ¿ >= BTree_D£¬  
-        // ÔÚÆäÖĞÕÒ key µÄÓÒº¢×Ó½áµãµÄµÚÒ»¸öÔªËØÉÏÒÆÖÁ¸¸½ÚµãkeyµÄÎ»ÖÃ  
-        // È»ºóÔÚÓÒº¢×Ó½ÚµãÖĞµİ¹éÉ¾³ıÔªËØrightKey¡£  
+        // 2bï¼Œé€‰æ‹©ç›¸å¯¹å¯Œæœ‰çš„å³å­©å­ç»“ç‚¹ã€‚  
+        // å¦‚æœä½äº key åçš„å³å­©å­ç»“ç‚¹çš„ key æ•°ç›® >= BTree_Dï¼Œ  
+        // åœ¨å…¶ä¸­æ‰¾ key çš„å³å­©å­ç»“ç‚¹çš„ç¬¬ä¸€ä¸ªå…ƒç´ ä¸Šç§»è‡³çˆ¶èŠ‚ç‚¹keyçš„ä½ç½®  
+        // ç„¶ååœ¨å³å­©å­èŠ‚ç‚¹ä¸­é€’å½’åˆ é™¤å…ƒç´ rightKeyã€‚  
         else if (node->child[index + 1]->keynum >= BTree_D) {  
             rightChild = node->child[index + 1];  
             rightKey = rightChild->key[0];  
@@ -397,23 +397,23 @@ index of Child:           i      i+1
   
             BTree_recursive_remove(&rightChild, rightKey);  
         }  
-        /*×óÓÒº¢×Ó½áµã¶¼¸ÕÍÑÆ¶¡£É¾³ıÇ°ĞèÒªº¢×Ó½áµãµÄºÏ²¢²Ù×÷*/  
-        // 2c£¬×óÓÒº¢×Ó½áµãÖ»°üº¬ BTree_D - 1 ¸ö½Úµã£¬  
-        // ºÏ²¢ÊÇ½« key ÏÂÒÆÖÁ×óº¢×Ó½Úµã£¬²¢½«ÓÒº¢×Ó½ÚµãºÏ²¢µ½×óº¢×Ó½ÚµãÖĞ£¬  
-        // É¾³ıÓÒº¢×Ó½Úµã£¬ÔÚ¸¸½ÚµãnodeÖĞÒÆ³ı key ºÍÖ¸ÏòÓÒº¢×Ó½ÚµãµÄÖ¸Õë£¬  
-        // È»ºóÔÚºÏ²¢ÁËµÄ×óº¢×Ó½ÚµãÖĞµİ¹éÉ¾³ıÔªËØkey¡£  
+        /*å·¦å³å­©å­ç»“ç‚¹éƒ½åˆšè„±è´«ã€‚åˆ é™¤å‰éœ€è¦å­©å­ç»“ç‚¹çš„åˆå¹¶æ“ä½œ*/  
+        // 2cï¼Œå·¦å³å­©å­ç»“ç‚¹åªåŒ…å« BTree_D - 1 ä¸ªèŠ‚ç‚¹ï¼Œ  
+        // åˆå¹¶æ˜¯å°† key ä¸‹ç§»è‡³å·¦å­©å­èŠ‚ç‚¹ï¼Œå¹¶å°†å³å­©å­èŠ‚ç‚¹åˆå¹¶åˆ°å·¦å­©å­èŠ‚ç‚¹ä¸­ï¼Œ  
+        // åˆ é™¤å³å­©å­èŠ‚ç‚¹ï¼Œåœ¨çˆ¶èŠ‚ç‚¹nodeä¸­ç§»é™¤ key å’ŒæŒ‡å‘å³å­©å­èŠ‚ç‚¹çš„æŒ‡é’ˆï¼Œ  
+        // ç„¶ååœ¨åˆå¹¶äº†çš„å·¦å­©å­èŠ‚ç‚¹ä¸­é€’å½’åˆ é™¤å…ƒç´ keyã€‚  
         else if (node->child[index]->keynum == BTree_D - 1  
             && node->child[index + 1]->keynum == BTree_D - 1){  
             leftChild = node->child[index];  
   
             BTree_merge_child(tree, node, index);  
   
-            // ÔÚºÏ²¢ÁËµÄ×óº¢×Ó½ÚµãÖĞµİ¹éÉ¾³ı key  
+            // åœ¨åˆå¹¶äº†çš„å·¦å­©å­èŠ‚ç‚¹ä¸­é€’å½’åˆ é™¤ key  
             BTree_recursive_remove(&leftChild, key);  
         }  
     }  
   
-/*======================Î´º¬ÓĞkeyµÄµ±Ç°½áµãÊ±µÄÇé¿ö==================== 
+/*======================æœªå«æœ‰keyçš„å½“å‰ç»“ç‚¹æ—¶çš„æƒ…å†µ==================== 
 node: 
 index of Key:            i-1  i  i+1 
                         +---+---+---+---+ 
@@ -427,17 +427,17 @@ index of Child:      i-1    i     i+1
         +---+---+---+   +---+---+---+  +---+---+---+ 
         leftSibling       Child        rightSibling  
 ============================================================*/  
-    /*¶ş¡¢½áµãÖĞÎ´ÕÒµ½ÁË¹Ø¼ü×ÖkeyµÄÇé¿ö.*/  
+    /*äºŒã€ç»“ç‚¹ä¸­æœªæ‰¾åˆ°äº†å…³é”®å­—keyçš„æƒ…å†µ.*/  
     else {  
         BTNode *leftSibling, *rightSibling, *child;  
-        // 3. key ²»ÔÚÄÚ½Úµã node ÖĞ£¬ÔòÓ¦µ±ÔÚÄ³¸ö°üº¬ key µÄ×Ó½ÚµãÖĞ¡£  
-        //  key < node->key[index], ËùÒÔ key Ó¦µ±ÔÚº¢×Ó½Úµã node->child[index] ÖĞ  
+        // 3. key ä¸åœ¨å†…èŠ‚ç‚¹ node ä¸­ï¼Œåˆ™åº”å½“åœ¨æŸä¸ªåŒ…å« key çš„å­èŠ‚ç‚¹ä¸­ã€‚  
+        //  key < node->key[index], æ‰€ä»¥ key åº”å½“åœ¨å­©å­èŠ‚ç‚¹ node->child[index] ä¸­  
         child = node->child[index];  
         if (!child) {  
             printf("Failed to remove %c, it is not in the tree!\n", key);  
             return;  
         }  
-        /*ËùĞè²éÕÒµÄ¸Ãº¢×Ó½áµã¸ÕÍÑÆ¶µÄÇé¿ö*/  
+        /*æ‰€éœ€æŸ¥æ‰¾çš„è¯¥å­©å­ç»“ç‚¹åˆšè„±è´«çš„æƒ…å†µ*/  
         if (child->keynum == BTree_D - 1) {  
             leftSibling = NULL;  
             rightSibling = NULL;  
@@ -449,10 +449,10 @@ index of Child:      i-1    i     i+1
             if (index + 1 <= node->keynum) {  
                 rightSibling = node->child[index + 1];  
             }  
-            /*Ñ¡ÔñÖÂ¸»µÄÏàÁÚĞÖµÜ½áµã¡£*/  
-            // 3a£¬Èç¹ûËùÔÚº¢×Ó½ÚµãÏàÁÚµÄĞÖµÜ½ÚµãÖĞÓĞ½ÚµãÖÁÉÙ°üº¬ BTree_D ¸ö¹Ø¼ü×Ö  
-            // ½« node µÄÒ»¸ö¹Ø¼ü×Ökey[index]ÏÂÒÆµ½ child ÖĞ£¬½«Ïà¶Ô¸»ÓĞµÄÏàÁÚĞÖµÜ½ÚµãÖĞÒ»¸ö¹Ø¼ü×ÖÉÏÒÆµ½  
-            // node ÖĞ£¬È»ºóÔÚ child º¢×Ó½ÚµãÖĞµİ¹éÉ¾³ı key¡£  
+            /*é€‰æ‹©è‡´å¯Œçš„ç›¸é‚»å…„å¼Ÿç»“ç‚¹ã€‚*/  
+            // 3aï¼Œå¦‚æœæ‰€åœ¨å­©å­èŠ‚ç‚¹ç›¸é‚»çš„å…„å¼ŸèŠ‚ç‚¹ä¸­æœ‰èŠ‚ç‚¹è‡³å°‘åŒ…å« BTree_D ä¸ªå…³é”®å­—  
+            // å°† node çš„ä¸€ä¸ªå…³é”®å­—key[index]ä¸‹ç§»åˆ° child ä¸­ï¼Œå°†ç›¸å¯¹å¯Œæœ‰çš„ç›¸é‚»å…„å¼ŸèŠ‚ç‚¹ä¸­ä¸€ä¸ªå…³é”®å­—ä¸Šç§»åˆ°  
+            // node ä¸­ï¼Œç„¶ååœ¨ child å­©å­èŠ‚ç‚¹ä¸­é€’å½’åˆ é™¤ keyã€‚  
             if ((leftSibling && leftSibling->keynum >= BTree_D)  
                 || (rightSibling && rightSibling->keynum >= BTree_D)) {  
                 int richR = 0;  
@@ -461,14 +461,14 @@ index of Child:      i-1    i     i+1
                     richR = cmp(rightSibling->keynum,leftSibling->keynum);  
                 }  
                 if (rightSibling && rightSibling->keynum >= BTree_D && richR) {  
-                    //ÏàÁÚÓÒĞÖµÜÏà¶Ô¸»ÓĞ£¬Ôò¸Ãº¢×ÓÏÈÏò¸¸½Úµã½èÒ»¸öÔªËØ£¬ÓÒĞÖµÜÖĞµÄµÚÒ»¸öÔªËØÉÏÒÆÖÁ¸¸½ÚµãËù½èÎ»ÖÃ£¬²¢½øĞĞÏàÓ¦µ÷Õû¡£  
+                    //ç›¸é‚»å³å…„å¼Ÿç›¸å¯¹å¯Œæœ‰ï¼Œåˆ™è¯¥å­©å­å…ˆå‘çˆ¶èŠ‚ç‚¹å€Ÿä¸€ä¸ªå…ƒç´ ï¼Œå³å…„å¼Ÿä¸­çš„ç¬¬ä¸€ä¸ªå…ƒç´ ä¸Šç§»è‡³çˆ¶èŠ‚ç‚¹æ‰€å€Ÿä½ç½®ï¼Œå¹¶è¿›è¡Œç›¸åº”è°ƒæ•´ã€‚  
                     child->key[child->keynum] = node->key[index];  
                     child->child[child->keynum + 1] = rightSibling->child[0];  
                     ++child->keynum;  
   
                     node->key[index] = rightSibling->key[0];  
   
-                    for (j = 0; j < rightSibling->keynum - 1; ++j) {//ÔªËØÇ°ÒÆ  
+                    for (j = 0; j < rightSibling->keynum - 1; ++j) {//å…ƒç´ å‰ç§»  
                         rightSibling->key[j] = rightSibling->key[j + 1];  
                         rightSibling->child[j] = rightSibling->child[j + 1];  
                     }  
@@ -477,8 +477,8 @@ index of Child:      i-1    i     i+1
                     rightSibling->child[rightSibling->keynum] = NULL;  
                     --rightSibling->keynum;  
                 }  
-                else {//ÏàÁÚ×óĞÖµÜÏà¶Ô¸»ÓĞ£¬Ôò¸Ãº¢×ÓÏò¸¸½Úµã½èÒ»¸öÔªËØ£¬×óĞÖµÜÖĞµÄ×îºóÔªËØÉÏÒÆÖÁ¸¸½ÚµãËù½èÎ»ÖÃ£¬²¢½øĞĞÏàÓ¦µ÷Õû¡£  
-                    for (j = child->keynum; j > 0; --j) {//ÔªËØºóÒÆ  
+                else {//ç›¸é‚»å·¦å…„å¼Ÿç›¸å¯¹å¯Œæœ‰ï¼Œåˆ™è¯¥å­©å­å‘çˆ¶èŠ‚ç‚¹å€Ÿä¸€ä¸ªå…ƒç´ ï¼Œå·¦å…„å¼Ÿä¸­çš„æœ€åå…ƒç´ ä¸Šç§»è‡³çˆ¶èŠ‚ç‚¹æ‰€å€Ÿä½ç½®ï¼Œå¹¶è¿›è¡Œç›¸åº”è°ƒæ•´ã€‚  
+                    for (j = child->keynum; j > 0; --j) {//å…ƒç´ åç§»  
                         child->key[j] = child->key[j - 1];  
                         child->child[j + 1] = child->child[j];  
                     }  
@@ -495,28 +495,28 @@ index of Child:      i-1    i     i+1
                     --leftSibling->keynum;  
                 }  
             }  
-            /*ÏàÁÚĞÖµÜ½áµã¶¼¸ÕÍÑÆ¶¡£É¾³ıÇ°ĞèÒªĞÖµÜ½áµãµÄºÏ²¢²Ù×÷,*/  
-            // 3b, Èç¹ûËùÔÚº¢×Ó½ÚµãÏàÁÚµÄĞÖµÜ½Úµã¶¼Ö»°üº¬ BTree_D - 1 ¸ö¹Ø¼ü×Ö£¬  
-            // ½« child ÓëÆäÒ»ÏàÁÚ½ÚµãºÏ²¢£¬²¢½« node ÖĞµÄÒ»¸ö¹Ø¼ü×ÖÏÂ½µµ½ºÏ²¢½ÚµãÖĞ£¬  
-            // ÔÙÔÚ node ÖĞÉ¾³ıÄÇ¸ö¹Ø¼ü×ÖºÍÏà¹ØÖ¸Õë£¬Èô node µÄ key Îª¿Õ£¬É¾Ö®£¬²¢µ÷Õû¸ùÎªºÏ²¢½áµã¡£  
-            // ×îºó£¬ÔÚÏà¹Øº¢×Ó½ÚµãchildÖĞµİ¹éÉ¾³ı key¡£  
+            /*ç›¸é‚»å…„å¼Ÿç»“ç‚¹éƒ½åˆšè„±è´«ã€‚åˆ é™¤å‰éœ€è¦å…„å¼Ÿç»“ç‚¹çš„åˆå¹¶æ“ä½œ,*/  
+            // 3b, å¦‚æœæ‰€åœ¨å­©å­èŠ‚ç‚¹ç›¸é‚»çš„å…„å¼ŸèŠ‚ç‚¹éƒ½åªåŒ…å« BTree_D - 1 ä¸ªå…³é”®å­—ï¼Œ  
+            // å°† child ä¸å…¶ä¸€ç›¸é‚»èŠ‚ç‚¹åˆå¹¶ï¼Œå¹¶å°† node ä¸­çš„ä¸€ä¸ªå…³é”®å­—ä¸‹é™åˆ°åˆå¹¶èŠ‚ç‚¹ä¸­ï¼Œ  
+            // å†åœ¨ node ä¸­åˆ é™¤é‚£ä¸ªå…³é”®å­—å’Œç›¸å…³æŒ‡é’ˆï¼Œè‹¥ node çš„ key ä¸ºç©ºï¼Œåˆ ä¹‹ï¼Œå¹¶è°ƒæ•´æ ¹ä¸ºåˆå¹¶ç»“ç‚¹ã€‚  
+            // æœ€åï¼Œåœ¨ç›¸å…³å­©å­èŠ‚ç‚¹childä¸­é€’å½’åˆ é™¤ keyã€‚  
             else if ((!leftSibling || (leftSibling && leftSibling->keynum == BTree_D - 1))  
                 && (!rightSibling || (rightSibling && rightSibling->keynum == BTree_D - 1))) {  
                 if (leftSibling && leftSibling->keynum == BTree_D - 1) {  
   
-                    BTree_merge_child(tree, node, index - 1);//nodeÖĞµÄÓÒº¢×ÓÔªËØºÏ²¢µ½×óº¢×ÓÖĞ¡£  
+                    BTree_merge_child(tree, node, index - 1);//nodeä¸­çš„å³å­©å­å…ƒç´ åˆå¹¶åˆ°å·¦å­©å­ä¸­ã€‚  
   
                     child = leftSibling;  
                 }  
   
                 else if (rightSibling && rightSibling->keynum == BTree_D - 1) {  
   
-                    BTree_merge_child(tree, node, index);//nodeÖĞµÄÓÒº¢×ÓÔªËØºÏ²¢µ½×óº¢×ÓÖĞ¡£  
+                    BTree_merge_child(tree, node, index);//nodeä¸­çš„å³å­©å­å…ƒç´ åˆå¹¶åˆ°å·¦å­©å­ä¸­ã€‚  
                 }  
             }  
         }  
   
-        BTree_recursive_remove(&child, key);//µ÷Õûºó£¬ÔÚkeyËùÔÚº¢×Ó½áµãÖĞ¼ÌĞøµİ¹éÉ¾³ıkey¡£  
+        BTree_recursive_remove(&child, key);//è°ƒæ•´åï¼Œåœ¨keyæ‰€åœ¨å­©å­ç»“ç‚¹ä¸­ç»§ç»­é€’å½’åˆ é™¤keyã€‚  
     }  
 }  
   
@@ -550,18 +550,18 @@ BTNode* BTree_recursive_search(const BTree tree, KeyType key, int* pos)
         return tree;  
     }  
   
-    // tree ÎªÒ¶×Ó½Úµã£¬ÕÒ²»µ½ key£¬²éÕÒÊ§°Ü·µ»Ø  
+    // tree ä¸ºå¶å­èŠ‚ç‚¹ï¼Œæ‰¾ä¸åˆ° keyï¼ŒæŸ¥æ‰¾å¤±è´¥è¿”å›  
     if (tree->isLeaf) {  
         return NULL;  
     }  
   
-    // ½ÚµãÄÚ²éÕÒÊ§°Ü£¬µ« tree->key[i - 1]< key < tree->key[i]£¬  
-    // ÏÂÒ»¸ö²éÕÒµÄ½áµãÓ¦Îª child[i]  
+    // èŠ‚ç‚¹å†…æŸ¥æ‰¾å¤±è´¥ï¼Œä½† tree->key[i - 1]< key < tree->key[i]ï¼Œ  
+    // ä¸‹ä¸€ä¸ªæŸ¥æ‰¾çš„ç»“ç‚¹åº”ä¸º child[i]  
   
-    // ´Ó´ÅÅÌ¶ÁÈ¡µÚ i ¸öº¢×ÓµÄÊı¾İ  
+    // ä»ç£ç›˜è¯»å–ç¬¬ i ä¸ªå­©å­çš„æ•°æ®  
     disk_read(&tree->child[i]);  
   
-    // µİ¹éµØ¼ÌĞø²éÕÒÓÚÊ÷ tree->child[i]  
+    // é€’å½’åœ°ç»§ç»­æŸ¥æ‰¾äºæ ‘ tree->child[i]  
     return BTree_recursive_search(tree->child[i], key, pos);  
 }  
   
@@ -585,7 +585,7 @@ void BTree_create(BTree* tree, const KeyType* data, int length)
     assert(tree);  
   
 #ifdef DEBUG_BTREE  
-    printf("\n ¿ªÊ¼´´½¨ B-Ê÷£¬¹Ø¼ü×ÖÎª:\n");  
+    printf("\n å¼€å§‹åˆ›å»º B-æ ‘ï¼Œå…³é”®å­—ä¸º:\n");  
     for (i = 0; i < length; i++) {  
         printf(" %c ", data[i]);  
     }  
@@ -594,19 +594,19 @@ void BTree_create(BTree* tree, const KeyType* data, int length)
   
     for (i = 0; i < length; i++) {  
 #ifdef DEBUG_BTREE  
-        printf("\n²åÈë¹Ø¼ü×Ö %c:\n", data[i]);  
+        printf("\næ’å…¥å…³é”®å­— %c:\n", data[i]);  
 #endif  
   
-        BTree_search(*tree,data[i],&pos);//Ê÷µÄµİ¹éËÑË÷¡£  
+        BTree_search(*tree,data[i],&pos);//æ ‘çš„é€’å½’æœç´¢ã€‚  
         if (pos!=-1)  
         {  
             printf("this key %c is in the B-tree,not to insert.\n",data[i]);  
         }else{  
-            BTree_insert(tree, data[i]);//²åÈëÔªËØµ½BTreeÖĞ¡£  
+            BTree_insert(tree, data[i]);//æ’å…¥å…ƒç´ åˆ°BTreeä¸­ã€‚  
         }  
   
 #ifdef DEBUG_BTREE  
-        BTree_print(*tree,1);//Ê÷µÄÉî¶È±éÀú,´ÓµÚÒ»²ã¿ªÊ¼¡£  
+        BTree_print(*tree,1);//æ ‘çš„æ·±åº¦éå†,ä»ç¬¬ä¸€å±‚å¼€å§‹ã€‚  
 #endif  
     }  
   
